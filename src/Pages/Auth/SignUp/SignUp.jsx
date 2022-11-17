@@ -1,14 +1,16 @@
 import React, { useState } from "react";
-import { Form } from "react-router-dom";
 import axios from "axios";
-import SendCode from "../SendCode";
+import { SignUpWrapper } from "../../../StyledComponents/Wrappers/SignUpWrapper";
+import { Col } from "react-bootstrap";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Pagination, Autoplay } from "swiper";
 const initialValue = {
   username: "",
   email: "",
   password: "",
 };
+
 export default function SignUp() {
-  const [showSendCodeInput, setShowSendCodeInput] = useState(false);
   const [value, setValue] = useState(initialValue);
 
   const changeValues = ({ target }) => {
@@ -17,53 +19,40 @@ export default function SignUp() {
       [target.name]: target.value,
     });
   };
-  const signUp = (e) => {
+
+  const signUpfunc = (e) => {
     e.preventDefault();
     if (value.email && value.password && value.username) {
       const urlApi = "https://english-teacher-uz.herokuapp.com/api/auth/signup";
+
       axios
         .post(urlApi, {
           username: value.username,
           email: value.email,
           password: value.password,
-        }).then(res => JSON.stringify(res))
+        })
         .then((res) => console.log(res))
-        .catch((err) => console.error(err));
+        .catch((err) => console.log(err));
     }
   };
   return (
-    <div>
-      <h1>SignUp</h1>
-      {(showSendCodeInput && <SendCode />) || (
-        <form onSubmit={signUp}>
-          <input
-            type="text"
-            placeholder="username"
-            value={value.username}
-            name="username"
-            onChange={changeValues}
-          />
-
-          <br />
-          <input
-            type="email"
-            placeholder="email"
-            value={value.email}
-            onChange={changeValues}
-            name="email"
-          />
-          <br />
-          <input
-            type="password"
-            placeholder="password"
-            value={value.password}
-            name="password"
-            onChange={changeValues}
-          />
-          <br />
-          <button>Sign Up</button>
-        </form>
-      )}
-    </div>
+    <SignUpWrapper>
+      <Col lg={6} md={6} sm={12} className="left-side border py-5">
+        <Swiper
+          modules={[Pagination, Autoplay]}
+          pagination={{ clickable: true }}
+          autoplay={{
+            delay: 1000,
+            // disableOnInteraction: false,
+          }}
+          loop={true}
+        >
+          <SwiperSlide>Slide 1</SwiperSlide>
+          <SwiperSlide>Slide 2</SwiperSlide>
+          <SwiperSlide>Slide 3</SwiperSlide>
+        </Swiper>
+      </Col>
+      <Col lg={6} md={6} sm={12} className="right-side border py-5"></Col>
+    </SignUpWrapper>
   );
 }
